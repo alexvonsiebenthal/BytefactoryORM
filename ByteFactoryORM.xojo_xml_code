@@ -1,0 +1,2830 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RBProject version="2014r1" FormatVersion="2" MinIDEVersion="20070100">
+<block type="Module" ID="108331071">
+ <ObjName>Record</ObjName>
+ <ObjContainerID>1056150053</ObjContainerID>
+ <IsClass>1</IsClass>
+ <ItemFlags>1</ItemFlags>
+ <IsInterface>0</IsInterface>
+ <Compatibility></Compatibility>
+ <Method>
+  <ItemName>Delete</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Delete(Cascade as Boolean = True)</SourceLine>
+   <SourceLine>if mRecordID &lt;&gt; -1 then</SourceLine>
+   <SourceLine>dim dc as ByteFactoryORM.DatabaseConnector = mTable.Connector</SourceLine>
+   <SourceLine>dc.Delete(self)</SourceLine>
+   <SourceLine>dim tables() as string = dc.Tables</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if cascade then</SourceLine>
+   <SourceLine>for i as integer = 0 to tables.Ubound</SourceLine>
+   <SourceLine>If  tables(i) &lt;&gt; mTable.GetTableName AND NOT tables(i).Contains(dc.RelationDelimiter) AND dc.Table(tables(i)).HasField(mTable.GetTableName+dc.RelationDelimiter+"id") then</SourceLine>
+   <SourceLine>dim cs as new ByteFactoryORM.ConditionSet</SourceLine>
+   <SourceLine>cs.Field(mTable.GetTableName+dc.RelationDelimiter+"id").IsEqual self.ID</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dc.Table(tables(i)).DeleteAll(true, cs)</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Cascade as Boolean = True</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Operator_Lookup</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Operator_Lookup(Field as String, LazyLoad as Boolean) As Variant</SourceLine>
+   <SourceLine>return self.Field(Field, LazyLoad)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String, LazyLoad as Boolean</ItemParams>
+  <ItemResult>Variant</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Operator_Lookup</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Operator_Lookup(Field as String, Assigns Value as Variant)</SourceLine>
+   <SourceLine>dim lazyLoad as Boolean</SourceLine>
+   <SourceLine>lazyLoad = self.mTable.Connector.LazyLoading</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Self.Field(Field, lazyLoad) = Value</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String, Assigns Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Constructor</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Constructor(Table as ByteFactoryORM.Table, RecordID as Integer = - 1)</SourceLine>
+   <SourceLine>If Table &lt;&gt; Nil then</SourceLine>
+   <SourceLine>mTable = Table</SourceLine>
+   <SourceLine>mRecordID = RecordID</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>dim e as new ByteFactoryORM.Error</SourceLine>
+   <SourceLine>e.ErrorNumber = 20</SourceLine>
+   <SourceLine>e.Message = "A table object may not be nil to create a new record object OR the passed ID does not exist."</SourceLine>
+   <SourceLine>Raise e</SourceLine>
+   <SourceLine>end If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>valueCache = new Dictionary</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Table as ByteFactoryORM.Table, RecordID as Integer = - 1</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>GetParentTable</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetParentTable() As ByteFactoryORM.Table</SourceLine>
+   <SourceLine>if mTable &lt;&gt; nil then</SourceLine>
+   <SourceLine>return mTable</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>dim e as new ByteFactoryORM.Error</SourceLine>
+   <SourceLine>e.ErrorNumber = 1 //change</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>e.Message = "No table object found."</SourceLine>
+   <SourceLine>Raise e</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>ByteFactoryORM.Table</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>ID</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function ID() As Integer</SourceLine>
+   <SourceLine>return mRecordID</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>Integer</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Field</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Field(Field as String, LazyLoad as Boolean) As Variant</SourceLine>
+   <SourceLine>Dim d as string = mTable.Connector.RelationDelimiter</SourceLine>
+   <SourceLine>dim dc as  ByteFactoryORM.DatabaseConnector = mTable.Connector</SourceLine>
+   <SourceLine>dim returnValue as variant //return</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if not LazyLoad then</SourceLine>
+   <SourceLine>if valueCache.HasKey(Field) then</SourceLine>
+   <SourceLine>return valueCache.Value(Field)</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if mTable.HasField(Field) then //it's a usual field request</SourceLine>
+   <SourceLine>returnValue = dc.ReadRecord(self, Field)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>elseif dc.HasTable(field) then //relation</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if dc.HasTable(field+d+mTable.GetTableName) OR dc.HasTable(mTable.GetTableName+d+field) then // its an n:m relation</SourceLine>
+   <SourceLine>dim JointTable as ByteFactoryORM.table</SourceLine>
+   <SourceLine>if dc.HasTable(field+d+mTable.GetTableName) then //field key first</SourceLine>
+   <SourceLine>JointTable = dc.Table(field+d+mTable.GetTableName)</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>JointTable = dc.Table(mTable.GetTableName+d+field)</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim joins() as ByteFactoryORM.Record = JointTable.GetRecordsByField(mTable.GetTableName+d+"id", self.ID)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Dim JoiningTable as ByteFactoryORM.Table = dc.Table(Field)</SourceLine>
+   <SourceLine>Dim Result() as ByteFactoryORM.Record</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>For i as integer = 0 to joins.Ubound</SourceLine>
+   <SourceLine>Result.Append JoiningTable.GetRecordByID(Joins(i).Field(Field+d+"id"))</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>returnValue = Result</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>elseif mTable.HasField(Field+d+"id") Then // n:1 -&gt; it's a child</SourceLine>
+   <SourceLine>dim ForeignTable as ByteFactoryORM.Table = dc.Table(Field)</SourceLine>
+   <SourceLine>returnValue = ForeignTable.GetRecordByID(self.Field(Field+d+"id"))</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>elseif dc.Table(Field).HasField(mTable.GetTableName+d+"id") then // 1:n -&gt; it's the parent, many childs</SourceLine>
+   <SourceLine>dim ForeignTable as ByteFactoryORM.Table = dc.Table(Field)</SourceLine>
+   <SourceLine>returnValue = ForeignTable.GetRecordsByField(mTable.GetTableName+d+"id", self.ID)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>//something went wrong</SourceLine>
+   <SourceLine>returnValue = nil</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if not LazyLoad then</SourceLine>
+   <SourceLine>valueCache.Value(Field) = returnValue</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>return returnValue</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String, LazyLoad as Boolean</ItemParams>
+  <ItemResult>Variant</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Field</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Field(Field as String, LazyLoad as Boolean, Assigns Value as Variant)</SourceLine>
+   <SourceLine>If ID = -1 then</SourceLine>
+   <SourceLine>mRecordID = mTable.Connector.Create(mTable)</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim dc as ByteFactoryORM.DatabaseConnector = mTable.Connector</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>select case Value.Type</SourceLine>
+   <SourceLine>case 4105, 9 //4096 (Array) + 9 (Object)</SourceLine>
+   <SourceLine>dim d as string = dc.RelationDelimiter</SourceLine>
+   <SourceLine>dim r() as ByteFactoryORM.Record</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if Value.IsArray then</SourceLine>
+   <SourceLine>r = Value</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>r.Append Value</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if dc.HasTable(field+d+mTable.GetTableName) OR dc.HasTable(mTable.GetTableName+d+field) then // its an n:m relation</SourceLine>
+   <SourceLine>dim JointTable as ByteFactoryORM.table</SourceLine>
+   <SourceLine>if dc.HasTable(field+d+mTable.GetTableName) then //field key first</SourceLine>
+   <SourceLine>JointTable = dc.Table(field+d+mTable.GetTableName)</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>JointTable = dc.Table(mTable.GetTableName+d+field)</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Dim IDs() as Integer </SourceLine>
+   <SourceLine>For i as Integer = 0 to r.Ubound</SourceLine>
+   <SourceLine>IDs.Append r(i).ID</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>//Getting rid of relations that still exist but are not passed by</SourceLine>
+   <SourceLine>Dim ObsoleteRelationsCS as new ByteFactoryORM.ConditionSet</SourceLine>
+   <SourceLine>ObsoleteRelationsCS.Field(Field+d+"id").IsNotIn IDs</SourceLine>
+   <SourceLine>ObsoleteRelationsCS.Field(mTable.GetTableName+d+"id").IsEqual self.ID</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>JointTable.DeleteAll(false, ObsoleteRelationsCS)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>//crete relations that do not exist yet</SourceLine>
+   <SourceLine>for i as integer = 0 to IDs.Ubound</SourceLine>
+   <SourceLine>dim ExistingCS as new ByteFactoryORM.ConditionSet</SourceLine>
+   <SourceLine>ExistingCS.Field(Field+d+"id").IsEqual IDs(i)</SourceLine>
+   <SourceLine>ExistingCS.Field(mTable.GetTableName+d+"id").IsEqual self.ID</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if JointTable.GetAllRecords(ExistingCS).Ubound &lt; 0 then //does not exist yet, let's create it</SourceLine>
+   <SourceLine>dim newRelation as ByteFactoryORM.Record = JointTable.AddRecord</SourceLine>
+   <SourceLine>newRelation.Field(Field+d+"id") = IDs(i)</SourceLine>
+   <SourceLine>newRelation.Field(mTable.GetTableName+d+"id") = self.ID</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>elseif mTable.HasField(Field+d+"id") Then // n:1 -&gt; it's a child</SourceLine>
+   <SourceLine>self.Field(Field+d+"id") = r(0).ID</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>elseif dc.Table(Field).HasField(mTable.GetTableName+d+"id") then // 1:n -&gt; it's the parent, many childs</SourceLine>
+   <SourceLine>r(0).Field(mTable.GetTableName+d+"id") = self.ID</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>else //any value</SourceLine>
+   <SourceLine>if mTable.HasField(Field) then</SourceLine>
+   <SourceLine>dc.Update(self, Field, Value)</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>//oh oh...</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>end select</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if valueCache.HasKey(Field) then</SourceLine>
+   <SourceLine>valueCache.Remove(Field)</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if not LazyLoad then</SourceLine>
+   <SourceLine>valueCache.Value(Field) = self.Field(Field)</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String, LazyLoad as Boolean, Assigns Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Operator_Lookup</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Operator_Lookup(Field as String) As Variant</SourceLine>
+   <SourceLine>dim lazyLoad as Boolean</SourceLine>
+   <SourceLine>lazyLoad = self.mTable.Connector.LazyLoading</SourceLine>
+   <SourceLine>return self.Field(Field, lazyLoad)</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String</ItemParams>
+  <ItemResult>Variant</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Operator_Lookup</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Operator_Lookup(Field as String, LazyLoad as Boolean, Assigns Value as Variant)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Self.Field(Field, lazyLoad) = Value</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String, LazyLoad as Boolean, Assigns Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Field</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Field(Field as String) As Variant</SourceLine>
+   <SourceLine>dim lazyLoad as Boolean</SourceLine>
+   <SourceLine>lazyLoad = self.mTable.Connector.LazyLoading</SourceLine>
+   <SourceLine>return self.Field(Field, lazyLoad)</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String</ItemParams>
+  <ItemResult>Variant</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Field</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Field(Field as String, Assigns Value as Variant)</SourceLine>
+   <SourceLine>dim lazyLoad as Boolean</SourceLine>
+   <SourceLine>lazyLoad = self.mTable.Connector.LazyLoading</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Self.Field(Field, lazyLoad) = Value</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String, Assigns Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IDArray</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine> Shared Function IDArray(Records() as ByteFactoryORM.Record) As Integer()</SourceLine>
+   <SourceLine>dim ids() as Integer</SourceLine>
+   <SourceLine>for i as Integer = 0 to Records.Ubound</SourceLine>
+   <SourceLine>ids.Append Records(i).ID</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine>return ids</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>1</IsShared>
+  <ItemParams>Records() as ByteFactoryORM.Record</ItemParams>
+  <ItemResult>Integer()</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IDDictionary</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine> Shared Function IDDictionary(Records() as ByteFactoryORM.Record) As Dictionary</SourceLine>
+   <SourceLine>dim d as new Dictionary</SourceLine>
+   <SourceLine>for i as Integer = 0 to Records.Ubound</SourceLine>
+   <SourceLine>d.Value(Records(i).id) = Records(i)</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine>return d</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>1</IsShared>
+  <ItemParams>Records() as ByteFactoryORM.Record</ItemParams>
+  <ItemResult>Dictionary</ItemResult>
+ </Method>
+ <Property>
+  <ItemName>mTable</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mTable As ByteFactoryORM.Table</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mTable As ByteFactoryORM.Table</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>mRecordID</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mRecordID As Integer</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mRecordID As Integer = -1</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>valueCache</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>valueCache As Dictionary</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>valueCache As Dictionary</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <ViewBehavior>
+  <ViewProperty>
+   <ObjName>Name</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Index</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <PropertyValue>-2147483648</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Super</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Left</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Top</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+ </ViewBehavior>
+</block>
+<block type="Module" ID="1801678094">
+ <ObjName>Table</ObjName>
+ <ObjContainerID>1056150053</ObjContainerID>
+ <IsClass>1</IsClass>
+ <ItemFlags>1</ItemFlags>
+ <IsInterface>0</IsInterface>
+ <Compatibility></Compatibility>
+ <Method>
+  <ItemName>GetAllRecords</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetAllRecords(ParamArray ConditionSets as ByteFactoryORM.ConditionSet) As ByteFactoryORM.Record()</SourceLine>
+   <SourceLine>Return GetAllRecords(ConditionSets)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>ParamArray ConditionSets as ByteFactoryORM.ConditionSet</ItemParams>
+  <ItemResult>ByteFactoryORM.Record()</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>GetRecordByID</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetRecordByID(ID as Integer) As ByteFactoryORM.Record</SourceLine>
+   <SourceLine>dim cs as new ByteFactoryORM.ConditionSet</SourceLine>
+   <SourceLine>cs.ID.IsEqual ID</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If self.GetAllRecords(cs).ubound = 0 then</SourceLine>
+   <SourceLine>dim r as new ByteFactoryORM.Record(self, ID)</SourceLine>
+   <SourceLine>Return r</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>dim e as new ByteFactoryORM.Error</SourceLine>
+   <SourceLine>e.ErrorNumber = 1 //change!!</SourceLine>
+   <SourceLine>e.Message = "Could not find record with ID: " + str(ID) + "."</SourceLine>
+   <SourceLine>Raise e</SourceLine>
+   <SourceLine>End if</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>ID as Integer</ItemParams>
+  <ItemResult>ByteFactoryORM.Record</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>GetRecordsByField</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetRecordsByField(Field as String, Value as Variant) As ByteFactoryORM.Record()</SourceLine>
+   <SourceLine>dim c as new ByteFactoryORM.ConditionSet</SourceLine>
+   <SourceLine>c.Field(Field).IsEqual Value</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Return self.GetAllRecords(c)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String, Value as Variant</ItemParams>
+  <ItemResult>ByteFactoryORM.Record()</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>GetFieldInfo</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetFieldInfo(FieldName as String) As Integer</SourceLine>
+   <SourceLine>return mTableInfo.Lookup(FieldName, -1).IntegerValue</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>FieldName as String</ItemParams>
+  <ItemResult>Integer</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Constructor</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Constructor(Connector as ByteFactoryORM.DatabaseConnector, Table as String)</SourceLine>
+   <SourceLine>If Table &lt;&gt; "" then</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if connector &lt;&gt; nil then</SourceLine>
+   <SourceLine>mconnector = connector</SourceLine>
+   <SourceLine>' elseif connector = nil and ByteFactoryORM.db &lt;&gt; nil then</SourceLine>
+   <SourceLine>' mConnector = ByteFactoryORM.db</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>dim e as new ByteFactoryORM.Error</SourceLine>
+   <SourceLine>e.ErrorNumber = 10</SourceLine>
+   <SourceLine>e.Message = "No connector passed by."</SourceLine>
+   <SourceLine>Raise e</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If NOT mConnector.HasTable(Table) then</SourceLine>
+   <SourceLine>mIsVirtual = True</SourceLine>
+   <SourceLine>End if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>mTableName = Table</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim d as new dictionary</SourceLine>
+   <SourceLine>dim rs as RecordSet</SourceLine>
+   <SourceLine>rs = mConnector.GetDatabaseHandle.FieldSchema(Table)</SourceLine>
+   <SourceLine>if rs &lt;&gt; nil then</SourceLine>
+   <SourceLine>while not rs.EOF</SourceLine>
+   <SourceLine>d.value(rs.Field("ColumnName").StringValue) = rs.Field("FieldType").IntegerValue</SourceLine>
+   <SourceLine>rs.MoveNext</SourceLine>
+   <SourceLine>wend</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>mTableInfo = d</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>dim e as new ByteFactoryORM.Error</SourceLine>
+   <SourceLine>e.ErrorNumber = 1</SourceLine>
+   <SourceLine>e.Message = "Table (" + Table + ") may not be empty."</SourceLine>
+   <SourceLine>Raise e</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Connector as ByteFactoryORM.DatabaseConnector, Table as String</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>AddRecord</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function AddRecord() As ByteFactoryORM.Record</SourceLine>
+   <SourceLine>if not mIsVirtual then</SourceLine>
+   <SourceLine>Dim r as new ByteFactoryORM.Record(self)</SourceLine>
+   <SourceLine>Return r</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>dim e as ByteFactoryORM.Error</SourceLine>
+   <SourceLine>e.ErrorNumber = 1</SourceLine>
+   <SourceLine>e.Message = "You cannot create a new record within a virtual table."</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>ByteFactoryORM.Record</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>GetTableName</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetTableName() As string</SourceLine>
+   <SourceLine>Return mTableName</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>string</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Operator_Lookup</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Operator_Lookup(Field as String, ID as Integer) As Variant</SourceLine>
+   <SourceLine>dim r as ByteFactoryORM.Record</SourceLine>
+   <SourceLine>r = self.GetRecordByID(ID)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>return self.mConnector.ReadRecord(r, Field)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String, ID as Integer</ItemParams>
+  <ItemResult>Variant</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>HasField</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function HasField(Field as String) As Boolean</SourceLine>
+   <SourceLine>return mTableInfo.HasKey(Field)</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String</ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>DeleteAll</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub DeleteAll(Cascade as Boolean = True, ParamArray ConditionSets as ByteFactoryORM.ConditionSet)</SourceLine>
+   <SourceLine>dim records() as ByteFactoryORM.Record = self.GetAllRecords(ConditionSets)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>for i as integer = 0 to records.Ubound</SourceLine>
+   <SourceLine>records(i).Delete(Cascade)</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Cascade as Boolean = True, ParamArray ConditionSets as ByteFactoryORM.ConditionSet</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>GetAllRecords</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetAllRecords(ConditionSets() as ByteFactoryORM.ConditionSet, OrderBy as String = "") As ByteFactoryORM.Record()</SourceLine>
+   <SourceLine>return mConnector.ReadTable(self, ConditionSets, OrderBy)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>ConditionSets() as ByteFactoryORM.ConditionSet, OrderBy as String = ""</ItemParams>
+  <ItemResult>ByteFactoryORM.Record()</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>GetAllRecords</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetAllRecords(OrderBy as String, ParamArray ConditionSets as ByteFactoryORM.ConditionSet) As ByteFactoryORM.Record()</SourceLine>
+   <SourceLine>Return GetAllRecords(ConditionSets, OrderBy)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>OrderBy as String, ParamArray ConditionSets as ByteFactoryORM.ConditionSet</ItemParams>
+  <ItemResult>ByteFactoryORM.Record()</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Fields</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Fields() As String()</SourceLine>
+   <SourceLine>DIM r() AS String</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>FOR EACH k as Variant in mTableInfo.Keys</SourceLine>
+   <SourceLine>r.Append k.StringValue</SourceLine>
+   <SourceLine>NEXT</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>return r</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>String()</ItemResult>
+ </Method>
+ <Property>
+  <ItemName>mTableName</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mTableName As String</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mTableName As String</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>mIsVirtual</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mIsVirtual As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mIsVirtual As Boolean = False</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>IsVirtual</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>IsVirtual As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>IsVirtual As Boolean</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <SetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Set</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Set</SourceLine>
+  </SetAccessor>
+  <GetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Get</SourceLine>
+   <SourceLine>return mIsVirtual</SourceLine>
+   <SourceLine>End Get</SourceLine>
+  </GetAccessor>
+ </Property>
+ <Property>
+  <ItemName>mTableInfo</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mTableInfo As Dictionary</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mTableInfo As Dictionary</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>mConnector</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mConnector As ByteFactoryORM.DatabaseConnector</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mConnector As ByteFactoryORM.DatabaseConnector</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>Connector</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Connector As ByteFactoryORM.DatabaseConnector</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>Connector As ByteFactoryORM.DatabaseConnector</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <SetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Set</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Set</SourceLine>
+  </SetAccessor>
+  <GetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Get</SourceLine>
+   <SourceLine>return mConnector</SourceLine>
+   <SourceLine>End Get</SourceLine>
+  </GetAccessor>
+ </Property>
+ <ViewBehavior>
+  <ViewProperty>
+   <ObjName>Name</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Index</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <PropertyValue>-2147483648</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Super</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Left</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Top</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>IsVirtual</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <ItemType>Boolean</ItemType>
+  </ViewProperty>
+ </ViewBehavior>
+</block>
+<block type="Module" ID="1284319964">
+ <ObjName>Error</ObjName>
+ <ObjContainerID>1056150053</ObjContainerID>
+ <IsClass>1</IsClass>
+ <Superclass>RuntimeException</Superclass>
+ <ItemFlags>1</ItemFlags>
+ <IsInterface>0</IsInterface>
+ <Compatibility></Compatibility>
+ <ViewBehavior>
+  <ViewProperty>
+   <ObjName>ErrorNumber</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Message</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <ItemType>String</ItemType>
+   <EditorType>MultiLineEditor</EditorType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Name</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Index</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <PropertyValue>-2147483648</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Super</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Left</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Top</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+ </ViewBehavior>
+</block>
+<block type="Module" ID="1256292157">
+ <ObjName>DatabaseConnector</ObjName>
+ <ObjContainerID>1056150053</ObjContainerID>
+ <IsClass>1</IsClass>
+ <ItemFlags>1</ItemFlags>
+ <IsInterface>0</IsInterface>
+ <Compatibility></Compatibility>
+ <Method>
+  <ItemName>Connect</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Connect() As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Create</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Create(Table as ByteFactoryORM.Table) As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Table as ByteFactoryORM.Table</ItemParams>
+  <ItemResult>Integer</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Delete</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Delete(Record as ByteFactoryORM.Record)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Record as ByteFactoryORM.Record</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>ReadRecord</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function ReadRecord(Record as ByteFactoryORM.Record, Field as String) As Variant</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Record as ByteFactoryORM.Record, Field as String</ItemParams>
+  <ItemResult>Variant</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Update</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Update(Record as ByteFactoryORM.Record, Field as String, Value as Variant)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Record as ByteFactoryORM.Record, Field as String, Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>GetDatabaseHandle</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetDatabaseHandle() As Database</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>Database</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Operator_Lookup</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Operator_Lookup(Table as String) As ByteFactoryORM.Table</SourceLine>
+   <SourceLine>return new ByteFactoryORM.Table(self, Table)</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Table as String</ItemParams>
+  <ItemResult>ByteFactoryORM.Table</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>HasTable</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function HasTable(Table as String) As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Table as String</ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Table</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Table(Table as String) As ByteFactoryORM.Table</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Table as String</ItemParams>
+  <ItemResult>ByteFactoryORM.Table</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Constructor</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Constructor()</SourceLine>
+   <SourceLine>mEncoding = Encodings.UTF8</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Tables</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Tables() As String()</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>String()</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>ReadTable</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function ReadTable(Table as ByteFactoryORM.Table, Optional ConditionSets() as ByteFactoryORM.ConditionSet, Optional OrderBy as String) As ByteFactoryORM.Record()</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Table as ByteFactoryORM.Table, Optional ConditionSets() as ByteFactoryORM.ConditionSet, Optional OrderBy as String</ItemParams>
+  <ItemResult>ByteFactoryORM.Record()</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Destructor</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Destructor()</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Property>
+  <ItemName>mEncoding</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mEncoding As TextEncoding</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mEncoding As TextEncoding</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>Encoding</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Encoding As TextEncoding</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>Encoding As TextEncoding</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <SetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Set</SourceLine>
+   <SourceLine>mEncoding = value</SourceLine>
+   <SourceLine>End Set</SourceLine>
+  </SetAccessor>
+  <GetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Get</SourceLine>
+   <SourceLine>return mEncoding</SourceLine>
+   <SourceLine>End Get</SourceLine>
+  </GetAccessor>
+ </Property>
+ <Property>
+  <ItemName>RelationDelimiter</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>RelationDelimiter As String</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>RelationDelimiter As String = "_"</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>LazyLoading</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>LazyLoading As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>LazyLoading As Boolean = True</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <ViewBehavior>
+  <ViewProperty>
+   <ObjName>Name</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Index</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <PropertyValue>-2147483648</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Super</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Left</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Top</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>RelationDelimiter</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <PropertyValue>_</PropertyValue>
+   <ItemType>String</ItemType>
+   <EditorType>MultiLineEditor</EditorType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>LazyLoading</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <PropertyValue>False</PropertyValue>
+   <ItemType>Boolean</ItemType>
+  </ViewProperty>
+ </ViewBehavior>
+</block>
+<block type="Module" ID="310438983">
+ <ObjName>SQLiteConnector</ObjName>
+ <ObjContainerID>1056150053</ObjContainerID>
+ <IsClass>1</IsClass>
+ <Superclass>ByteFactoryORM.DatabaseConnector</Superclass>
+ <ItemFlags>1</ItemFlags>
+ <IsInterface>0</IsInterface>
+ <Compatibility></Compatibility>
+ <Method>
+  <ItemName>Connect</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Connect() As Boolean</SourceLine>
+   <SourceLine>if mDatabaseFile &lt;&gt; nil and mDatabaseFile.Exists then</SourceLine>
+   <SourceLine>mDatabase = new SQLiteDatabase</SourceLine>
+   <SourceLine>mDatabase.DatabaseFile = mDatabaseFile</SourceLine>
+   <SourceLine>mDatabase.EncryptionKey = mEncryptionKey</SourceLine>
+   <SourceLine>mDatabase.MultiUser = WAL</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if mDatabase.Connect then</SourceLine>
+   <SourceLine>mIsConnected = true</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>//get all tables</SourceLine>
+   <SourceLine>dim tbls() as string</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim rs as recordset</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>rs = mDatabase.TableSchema</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if rs &lt;&gt; nil then</SourceLine>
+   <SourceLine>while not rs.eof</SourceLine>
+   <SourceLine>tbls.append rs.Field("TableName").StringValue</SourceLine>
+   <SourceLine>rs.MoveNext</SourceLine>
+   <SourceLine>wend</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>mTables = tbls</SourceLine>
+   <SourceLine>return true</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>return false</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>return false</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Create</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Create(Table as ByteFactoryORM.Table) As Integer</SourceLine>
+   <SourceLine>if mIsConnected and not Table.IsVirtual then</SourceLine>
+   <SourceLine>Dim SqlStatement as String</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>SqlStatement = "INSERT INTO " + Table.GetTableName + " (id) VALUES (NULL);"</SourceLine>
+   <SourceLine>mDatabase.SQLExecute(SqlStatement)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if NOT mDatabase.Error then</SourceLine>
+   <SourceLine>return mDatabase.LastRowID</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim e as new ByteFactoryORM.Error</SourceLine>
+   <SourceLine>e.ErrorNumber = 1 //Change!!</SourceLine>
+   <SourceLine>e.Message = "Could not create Record. DB ERROR (" + str(mDatabase.ErrorCode) + ") :" + mDatabase.ErrorMessage</SourceLine>
+   <SourceLine>Raise e</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Table as ByteFactoryORM.Table</ItemParams>
+  <ItemResult>Integer</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Delete</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Delete(Record as ByteFactoryORM.Record)</SourceLine>
+   <SourceLine>if mIsConnected and not Record.GetParentTable.IsVirtual then</SourceLine>
+   <SourceLine>dim SqlStatement as String</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>SqlStatement = "DELETE FROM " + Record.GetParentTable.GetTableName + " WHERE id = " + str(Record.ID) + ";"</SourceLine>
+   <SourceLine>mDatabase.SQLExecute SqlStatement</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if  mDatabase.Error then</SourceLine>
+   <SourceLine>dim e as new ByteFactoryORM.Error</SourceLine>
+   <SourceLine>e.ErrorNumber = 1 //Change!!</SourceLine>
+   <SourceLine>e.Message = "Could not create Record. DB ERROR (" + str(mDatabase.ErrorCode) + ") :" + mDatabase.ErrorMessage</SourceLine>
+   <SourceLine>Raise e</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Record as ByteFactoryORM.Record</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>ReadRecord</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function ReadRecord(Record as ByteFactoryORM.Record, Field as String) As Variant</SourceLine>
+   <SourceLine>if mIsConnected and Field &lt;&gt; "" then</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim ps as SQLitePreparedStatement</SourceLine>
+   <SourceLine>ps = mDatabase.Prepare("SELECT "+ FIELD +" FROM (" + record.GetParentTable.GetTableName + ") WHERE id = ?;")</SourceLine>
+   <SourceLine>ps.BindType(0, ps.SQLITE_INTEGER)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Dim rs as RecordSet</SourceLine>
+   <SourceLine>'rs = mDatabase.SQLSelect(SqlStatement)</SourceLine>
+   <SourceLine>rs = ps.SQLSelect(Record.ID)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if rs &lt;&gt; nil and not rs.bof then</SourceLine>
+   <SourceLine>dim value as variant = rs.Field(Field).Value</SourceLine>
+   <SourceLine>Return value</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>return nil</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Record as ByteFactoryORM.Record, Field as String</ItemParams>
+  <ItemResult>Variant</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Update</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Update(Record as ByteFactoryORM.Record, Field as String, Value as Variant)</SourceLine>
+   <SourceLine>if mIsConnected and not Record.GetParentTable.IsVirtual then</SourceLine>
+   <SourceLine>' dim SqlQuery as string = "UPDATE " + record.GetParentTable.GetTableName + " SET " + Field + " = "</SourceLine>
+   <SourceLine>' SqlQuery.Append Record.GetParentTable.EscapeValue(Field, Value, Encoding)</SourceLine>
+   <SourceLine>' SqlQuery.Append " WHERE id = " + str(Record.ID) + ";"</SourceLine>
+   <SourceLine>' </SourceLine>
+   <SourceLine>' mDatabase.SQLExecute(SqlQuery)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim ps as SQLitePreparedStatement</SourceLine>
+   <SourceLine>dim SqlQuery as string = "UPDATE " + Record.GetParentTable.GetTableName + " SET " + Field + " = ? WHERE id = ?;"</SourceLine>
+   <SourceLine>ps = mDatabase.Prepare(SqlQuery)</SourceLine>
+   <SourceLine>ps.BindType(0, getBindTypeByValue(Value))</SourceLine>
+   <SourceLine>ps.BindType(1, ps.SQLITE_INTEGER)</SourceLine>
+   <SourceLine>ps.Bind(0, Value)</SourceLine>
+   <SourceLine>ps.Bind(1, Record.ID)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>ps.SQLExecute</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if mDatabase.Error then</SourceLine>
+   <SourceLine>dim e as new ByteFactoryORM.Error</SourceLine>
+   <SourceLine>e.ErrorNumber = 1111 //change!!</SourceLine>
+   <SourceLine>e.Message = "Error updating record."</SourceLine>
+   <SourceLine>Raise e</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Record as ByteFactoryORM.Record, Field as String, Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Constructor</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Constructor(DB as FolderItem, EncryptionKey as String = "", WAL as Boolean = false)</SourceLine>
+   <SourceLine>if db &lt;&gt; nil then</SourceLine>
+   <SourceLine>mDatabaseFile = DB</SourceLine>
+   <SourceLine>mEncryptionKey = EncryptionKey</SourceLine>
+   <SourceLine>'Encoding = Encodings.UTF8</SourceLine>
+   <SourceLine>me.WAL = WAL</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>//call the super's constructor!</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>super.Constructor</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>4096</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>DB as FolderItem, EncryptionKey as String = "", WAL as Boolean = false</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>GetDatabaseHandle</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetDatabaseHandle() As Database</SourceLine>
+   <SourceLine>Return mDatabase</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>Database</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>HasTable</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function HasTable(Table as String) As Boolean</SourceLine>
+   <SourceLine>if mTables.IndexOf(Table) &gt; -1 then</SourceLine>
+   <SourceLine>return true</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>return false</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Table as String</ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Table</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Table(Table as String) As ByteFactoryORM.Table</SourceLine>
+   <SourceLine>if Table &lt;&gt; "" and mIsConnected then</SourceLine>
+   <SourceLine>return new ByteFactoryORM.Table(self, Table)</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>return nil</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Table as String</ItemParams>
+  <ItemResult>ByteFactoryORM.Table</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Tables</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Tables() As String()</SourceLine>
+   <SourceLine>Return mTables</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>String()</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>ReadTable</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function ReadTable(Table as ByteFactoryORM.Table, Optional ConditionSets() as ByteFactoryORM.ConditionSet, Optional OrderBy as String) As ByteFactoryORM.Record()</SourceLine>
+   <SourceLine>dim results() as ByteFactoryORM.Record</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if not mIsConnected then</SourceLine>
+   <SourceLine>return nil</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim sql as string = "SELECT id FROM ("+Table.GetTableName+")"</SourceLine>
+   <SourceLine>dim b as string = "?"</SourceLine>
+   <SourceLine>dim bindings() as variant</SourceLine>
+   <SourceLine>dim fieldbindings() AS Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If ConditionSets.Ubound &gt; -1 then //conditionsets submitted</SourceLine>
+   <SourceLine>Sql.Append " WHERE "</SourceLine>
+   <SourceLine>dim ConditionStatement() as String</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>for i as integer = 0 to ConditionSets.ubound</SourceLine>
+   <SourceLine>dim SubCondition() as String</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim Conditions() as ByteFactoryORM.Condition = ConditionSets(i).Conditions</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>for j as integer = 0 to Conditions.Ubound</SourceLine>
+   <SourceLine>dim c as ByteFactoryORM.Condition</SourceLine>
+   <SourceLine>c = Conditions(j)</SourceLine>
+   <SourceLine>dim skip as boolean = false</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>select case c.ConditionType</SourceLine>
+   <SourceLine>case 0 //IsEqual</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " = " + b</SourceLine>
+   <SourceLine>case 1 //IsLike</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " LIKE " + b + ""</SourceLine>
+   <SourceLine>case 2 //IsBigger</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " &gt; " + b</SourceLine>
+   <SourceLine>case 3 //IsBiggerOrEqual</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " &gt;= " + b</SourceLine>
+   <SourceLine>case 4 //IsSmaller</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " &lt; " + b</SourceLine>
+   <SourceLine>case 5 //IsSmallerOrEqual</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " &lt;= " + b</SourceLine>
+   <SourceLine>case 6 //isTrue</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " = TRUE"</SourceLine>
+   <SourceLine>case 7 //isFalse</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " = FALSE"</SourceLine>
+   <SourceLine>case 8 //isNull</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " IS NULL"</SourceLine>
+   <SourceLine>case 9 //isNotNull</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " IS NOT NULL"</SourceLine>
+   <SourceLine>case 10 //isNotEqual</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " &lt;&gt; " + b</SourceLine>
+   <SourceLine>case 11 //isNotLike</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " NOT LIKE '%" + b + "%'"</SourceLine>
+   <SourceLine>case 12 //isIn</SourceLine>
+   <SourceLine>dim values() as variant</SourceLine>
+   <SourceLine>if c.Value.IsArray then</SourceLine>
+   <SourceLine>values = VariantArray(c.Value)</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>values.Append c.Value</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim columns() as string</SourceLine>
+   <SourceLine>for x as integer = 0 to values.Ubound</SourceLine>
+   <SourceLine>columns.Append b</SourceLine>
+   <SourceLine>bindings.append values(x)</SourceLine>
+   <SourceLine>fieldbindings.Append Table.GetFieldInfo(c.Field)</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " IN (" + join(columns, ", ") + ")"</SourceLine>
+   <SourceLine>case 13 //isNotIn</SourceLine>
+   <SourceLine>dim values() as variant </SourceLine>
+   <SourceLine>if c.Value.IsArray then</SourceLine>
+   <SourceLine>values = VariantArray(c.Value)</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>values.Append c.Value</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim columns() as string</SourceLine>
+   <SourceLine>for x as integer = 0 to values.Ubound</SourceLine>
+   <SourceLine>'columns.Append EscapeValue(c.Field, values(x), self.mConnector.Encoding)</SourceLine>
+   <SourceLine>Columns.Append b</SourceLine>
+   <SourceLine>bindings.append values(x)</SourceLine>
+   <SourceLine>fieldbindings.Append Table.GetFieldInfo(c.Field)</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine>SubCondition.Append c.Field + " NOT IN (" + join(columns, ", ") + ")"</SourceLine>
+   <SourceLine>end select</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>'if skip then continue</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>select case c.ConditionType</SourceLine>
+   <SourceLine>case 0,2,3,4,5,10</SourceLine>
+   <SourceLine>bindings.Append c.Value</SourceLine>
+   <SourceLine>fieldbindings.Append Table.GetFieldInfo(c.Field)</SourceLine>
+   <SourceLine>case 1, 11</SourceLine>
+   <SourceLine>bindings.Append "%" + c.Value.StringValue + "%"</SourceLine>
+   <SourceLine>fieldbindings.Append 5 // Table.GetFieldInfo(c.Field)</SourceLine>
+   <SourceLine>end select</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>ConditionStatement.Append "("+Join(SubCondition, " AND ")+")"</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim Cond, ord as String</SourceLine>
+   <SourceLine>If OrderBy &lt;&gt; "" then</SourceLine>
+   <SourceLine>ord = " ORDER BY "+OrderBy</SourceLine>
+   <SourceLine>End if</SourceLine>
+   <SourceLine>Cond = Join(ConditionStatement, " OR ") + ord + ";"</SourceLine>
+   <SourceLine>SQL.Append Cond</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>dim ord as String</SourceLine>
+   <SourceLine>If OrderBy &lt;&gt; "" then</SourceLine>
+   <SourceLine>ord = " ORDER BY "+OrderBy + ";"</SourceLine>
+   <SourceLine>End if</SourceLine>
+   <SourceLine>SQL.Append ord</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim ps as SQLitePreparedStatement</SourceLine>
+   <SourceLine>ps = mDatabase.Prepare(SQL)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if bindings.Ubound &gt; -1 then</SourceLine>
+   <SourceLine>for i as integer = 0 to bindings.Ubound</SourceLine>
+   <SourceLine>dim bindtype as integer = getBindTypeByField(fieldbindings(i))</SourceLine>
+   <SourceLine>ps.BindType(i, bindtype)</SourceLine>
+   <SourceLine>ps.Bind(i, bindings(i))</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>dim rs as RecordSet</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>'IF ConditionSets.Ubound &gt; -1 AND orderby.instr("LIMIT 0, 50") &gt; 0 THEN</SourceLine>
+   <SourceLine>'BREAK</SourceLine>
+   <SourceLine>'END IF</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>rs = ps.SQLSelect()</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if rs &lt;&gt; nil then</SourceLine>
+   <SourceLine>while not rs.eof</SourceLine>
+   <SourceLine>dim r as new ByteFactoryORM.Record(Table, rs.Field("id").IntegerValue)</SourceLine>
+   <SourceLine>rs.movenext</SourceLine>
+   <SourceLine>results.Append r</SourceLine>
+   <SourceLine>wend</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>return results</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Table as ByteFactoryORM.Table, Optional ConditionSets() as ByteFactoryORM.ConditionSet, Optional OrderBy as String</ItemParams>
+  <ItemResult>ByteFactoryORM.Record()</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>getBindTypeByValue</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function getBindTypeByValue(Value as Variant) As Integer</SourceLine>
+   <SourceLine>dim ps as SQLitePreparedStatement</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Select Case Value.Type</SourceLine>
+   <SourceLine>Case 0</SourceLine>
+   <SourceLine>Return ps.SQLITE_NULL</SourceLine>
+   <SourceLine>Case 2</SourceLine>
+   <SourceLine>Return ps.SQLITE_INTEGER</SourceLine>
+   <SourceLine>case 3</SourceLine>
+   <SourceLine>return ps.SQLITE_INT64</SourceLine>
+   <SourceLine>case 4,5,6</SourceLine>
+   <SourceLine>return ps.SQLITE_DOUBLE</SourceLine>
+   <SourceLine>case 11</SourceLine>
+   <SourceLine>return ps.SQLITE_BOOLEAN</SourceLine>
+   <SourceLine>case 7,8,18,19,20,21</SourceLine>
+   <SourceLine>return ps.SQLITE_TEXT</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>return ps.SQLITE_BLOB</SourceLine>
+   <SourceLine>end select</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Value as Variant</ItemParams>
+  <ItemResult>Integer</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>destructor</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub destructor()</SourceLine>
+   <SourceLine>mDatabase.Close</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>getBindTypeByField</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function getBindTypeByField(FieldInfo AS Integer) As Integer</SourceLine>
+   <SourceLine>dim ps as SQLitePreparedStatement</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Select Case FieldInfo</SourceLine>
+   <SourceLine>Case 0</SourceLine>
+   <SourceLine>Return ps.SQLITE_NULL</SourceLine>
+   <SourceLine>Case 2</SourceLine>
+   <SourceLine>Return ps.SQLITE_INTEGER</SourceLine>
+   <SourceLine>case 3,19</SourceLine>
+   <SourceLine>return ps.SQLITE_INT64</SourceLine>
+   <SourceLine>case 6,7,13</SourceLine>
+   <SourceLine>return ps.SQLITE_DOUBLE</SourceLine>
+   <SourceLine>case 12</SourceLine>
+   <SourceLine>return ps.SQLITE_BOOLEAN</SourceLine>
+   <SourceLine>case 4,5,8-11,18,20,21</SourceLine>
+   <SourceLine>return ps.SQLITE_TEXT</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>return ps.SQLITE_BLOB</SourceLine>
+   <SourceLine>end select</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>FieldInfo AS Integer</ItemParams>
+  <ItemResult>Integer</ItemResult>
+ </Method>
+ <Property>
+  <ItemName>mDatabaseFile</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mDatabaseFile As FolderItem</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mDatabaseFile As FolderItem</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>mEncryptionKey</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mEncryptionKey As String</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mEncryptionKey As String</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>mDatabase</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mDatabase As SQLiteDatabase</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mDatabase As SQLiteDatabase</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>mIsConnected</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mIsConnected As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mIsConnected As Boolean = False</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>mTables()</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mTables() As String</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mTables() As String</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>WAL</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>WAL As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>WAL As Boolean</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <ViewBehavior>
+  <ViewProperty>
+   <ObjName>RelationDelimiter</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <PropertyValue>_</PropertyValue>
+   <ItemType>String</ItemType>
+   <EditorType>MultiLineEditor</EditorType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>LazyLoading</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <PropertyValue>False</PropertyValue>
+   <ItemType>Boolean</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Name</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Index</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <PropertyValue>-2147483648</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Super</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Left</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Top</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+ </ViewBehavior>
+</block>
+<block type="Module" ID="545984658">
+ <ObjName>ConditionSet</ObjName>
+ <ObjContainerID>1056150053</ObjContainerID>
+ <IsClass>1</IsClass>
+ <ItemFlags>1</ItemFlags>
+ <IsInterface>0</IsInterface>
+ <Compatibility></Compatibility>
+ <Method>
+  <ItemName>Operator_Lookup</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Operator_Lookup(Field as String) As ByteFactoryORM.Condition</SourceLine>
+   <SourceLine>dim c as new ByteFactoryORM.Condition(Field)</SourceLine>
+   <SourceLine>mConditions.Append c</SourceLine>
+   <SourceLine>return c</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String</ItemParams>
+  <ItemResult>ByteFactoryORM.Condition</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Conditions</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Conditions() As ByteFactoryORM.Condition()</SourceLine>
+   <SourceLine>Return mConditions</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>ByteFactoryORM.Condition()</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Field</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Field(Field as String) As ByteFactoryORM.Condition</SourceLine>
+   <SourceLine>dim c as new ByteFactoryORM.Condition(Field)</SourceLine>
+   <SourceLine>mConditions.Append c</SourceLine>
+   <SourceLine>return c</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String</ItemParams>
+  <ItemResult>ByteFactoryORM.Condition</ItemResult>
+ </Method>
+ <Property>
+  <ItemName>mConditions()</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mConditions() As ByteFactoryORM.Condition</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mConditions() As ByteFactoryORM.Condition</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <ViewBehavior>
+  <ViewProperty>
+   <ObjName>Name</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Index</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <PropertyValue>-2147483648</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Super</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Left</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Top</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+ </ViewBehavior>
+</block>
+<block type="Module" ID="869646832">
+ <ObjName>Condition</ObjName>
+ <ObjContainerID>1056150053</ObjContainerID>
+ <IsClass>1</IsClass>
+ <ItemFlags>1</ItemFlags>
+ <IsInterface>0</IsInterface>
+ <Compatibility></Compatibility>
+ <Method>
+  <ItemName>IsBigger</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsBigger(Value as Variant)</SourceLine>
+   <SourceLine>mConditionType = 2</SourceLine>
+   <SourceLine>Self.mValue = Value</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsBiggerOrEqual</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsBiggerOrEqual(Value as Variant)</SourceLine>
+   <SourceLine>mConditionType = 3</SourceLine>
+   <SourceLine>Self.mValue = Value</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsEqual</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsEqual(Value as Variant)</SourceLine>
+   <SourceLine>mConditionType = 0</SourceLine>
+   <SourceLine>Self.mValue = Value</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsLike</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsLike(Value as Variant)</SourceLine>
+   <SourceLine>mConditionType = 1</SourceLine>
+   <SourceLine>Self.mValue = Value</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsSmaller</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsSmaller(Value as Variant)</SourceLine>
+   <SourceLine>mConditionType = 4</SourceLine>
+   <SourceLine>Self.mValue = Value</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsSmallerOrEqual</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsSmallerOrEqual(Value as Variant)</SourceLine>
+   <SourceLine>mConditionType = 5</SourceLine>
+   <SourceLine>Self.mValue = Value</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsTrue</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsTrue()</SourceLine>
+   <SourceLine>mConditionType = 6</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsFalse</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsFalse()</SourceLine>
+   <SourceLine>mConditionType = 7</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsNull</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsNull()</SourceLine>
+   <SourceLine>mConditionType = 8</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsNotNull</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsNotNull()</SourceLine>
+   <SourceLine>mConditionType = 9</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Constructor</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Constructor(Field as String)</SourceLine>
+   <SourceLine>self.mField = Field</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Field as String</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsNotEqual</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsNotEqual(Value as Variant)</SourceLine>
+   <SourceLine>mConditionType = 10</SourceLine>
+   <SourceLine>mValue = Value</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsNotLike</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsNotLike(Value as Variant)</SourceLine>
+   <SourceLine>mConditionType = 11</SourceLine>
+   <SourceLine>mValue = Value</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Value as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsIn</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsIn(ParamArray Values() as Variant)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if Values.Ubound = 0 then // one object</SourceLine>
+   <SourceLine>if Values(0).IsArray then</SourceLine>
+   <SourceLine>self.IsIn(VariantArray(values(0)))</SourceLine>
+   <SourceLine>exit</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>self.IsIn(Values)</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>ParamArray Values() as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsIn</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsIn(Values() as Variant)</SourceLine>
+   <SourceLine>mConditionType = 12</SourceLine>
+   <SourceLine>mValue = Values</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Values() as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsNotIn</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub IsNotIn(ParamArray Values() as Variant)</SourceLine>
+   <SourceLine>mConditionType = 13</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If Values.Ubound = 0 and Values(0).IsArray Then</SourceLine>
+   <SourceLine>mValue = Values(0)</SourceLine>
+   <SourceLine>else</SourceLine>
+   <SourceLine>mValue = Values</SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>ParamArray Values() as Variant</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Clone</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Clone(FieldName As String) As ByteFactoryORM.Condition</SourceLine>
+   <SourceLine>//Does nothing ATM</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>FieldName As String</ItemParams>
+  <ItemResult>ByteFactoryORM.Condition</ItemResult>
+ </Method>
+ <Property>
+  <ItemName>mField</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mField As String</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mField As String</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>mConditionType</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mConditionType As Integer</SourceLine>
+   <SourceLine>0 = IsEqual</SourceLine>
+   <SourceLine>1 = IsLike</SourceLine>
+   <SourceLine>2 = IsBigger</SourceLine>
+   <SourceLine>3 = IsBiggerOrEqual</SourceLine>
+   <SourceLine>4 = IsSmaller</SourceLine>
+   <SourceLine>5 = IsSmallerOrEqual</SourceLine>
+   <SourceLine>6 = IsTrue</SourceLine>
+   <SourceLine>7 = IsFalse</SourceLine>
+   <SourceLine>8 = IsNull</SourceLine>
+   <SourceLine>9 = IsNotNull</SourceLine>
+   <SourceLine>10 = IsNotEqual</SourceLine>
+   <SourceLine>11 = IsNotLike</SourceLine>
+   <SourceLine>12 = IsIn</SourceLine>
+   <SourceLine>13 = IsNotIn</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mConditionType As Integer</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>mValue</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>mValue As Variant</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>mValue As Variant</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>ConditionType</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>ConditionType As Integer</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>ConditionType As Integer</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <SetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Set</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Set</SourceLine>
+  </SetAccessor>
+  <GetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Get</SourceLine>
+   <SourceLine>return mConditionType</SourceLine>
+   <SourceLine>End Get</SourceLine>
+  </GetAccessor>
+ </Property>
+ <Property>
+  <ItemName>Field</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Field As String</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>Field As String</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <SetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Set</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Set</SourceLine>
+  </SetAccessor>
+  <GetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Get</SourceLine>
+   <SourceLine>return mField</SourceLine>
+   <SourceLine>End Get</SourceLine>
+  </GetAccessor>
+ </Property>
+ <Property>
+  <ItemName>Value</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Value As Variant</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>Value As Variant</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <SetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Set</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Set</SourceLine>
+  </SetAccessor>
+  <GetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Get</SourceLine>
+   <SourceLine>return mValue</SourceLine>
+   <SourceLine>End Get</SourceLine>
+  </GetAccessor>
+ </Property>
+ <ViewBehavior>
+  <ViewProperty>
+   <ObjName>Name</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Index</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <PropertyValue>-2147483648</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Super</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Left</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Top</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>ConditionType</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Field</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <ItemType>String</ItemType>
+   <EditorType>MultiLineEditor</EditorType>
+  </ViewProperty>
+ </ViewBehavior>
+</block>
+<block type="Module" ID="1056150053">
+ <ObjName>ByteFactoryORM</ObjName>
+ <ObjContainerID>0</ObjContainerID>
+ <IsClass>0</IsClass>
+ <ItemFlags>1</ItemFlags>
+ <IsInterface>0</IsInterface>
+ <Compatibility></Compatibility>
+ <Method>
+  <ItemName>Append</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Append(Extends ByRef s as string, Appendix as String)</SourceLine>
+   <SourceLine>s = s + Appendix</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Extends ByRef s as string, Appendix as String</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Contains</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Contains(extends s as string, SearchString as String) As Boolean</SourceLine>
+   <SourceLine>return s.instr(SearchString) &gt; 0</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>extends s as string, SearchString as String</ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Str</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Str(extends i as integer) As String</SourceLine>
+   <SourceLine>Return str(i)</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>extends i as integer</ItemParams>
+  <ItemResult>String</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>VariantArray</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function VariantArray(Arr as Variant) As Variant()</SourceLine>
+   <SourceLine>dim r() as Variant</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>if arr.IsArray then</SourceLine>
+   <SourceLine>select case arr.ArrayElementType</SourceLine>
+   <SourceLine>case variant.TypeBoolean</SourceLine>
+   <SourceLine>dim v() as boolean = arr</SourceLine>
+   <SourceLine>for i as integer = 0 to v.Ubound</SourceLine>
+   <SourceLine>r.Append v(i)</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine>case Variant.TypeString</SourceLine>
+   <SourceLine>dim v() as string = arr</SourceLine>
+   <SourceLine>for i as integer = 0 to v.Ubound</SourceLine>
+   <SourceLine>r.Append v(i)</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine>case Variant.TypeDouble</SourceLine>
+   <SourceLine>dim v() as double = arr</SourceLine>
+   <SourceLine>for i as integer = 0 to v.Ubound</SourceLine>
+   <SourceLine>r.Append v(i)</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine>case Variant.TypeInteger</SourceLine>
+   <SourceLine>dim v() as integer = arr</SourceLine>
+   <SourceLine>for i as integer = 0 to v.Ubound</SourceLine>
+   <SourceLine>r.Append v(i)</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine>case variant.TypeObject</SourceLine>
+   <SourceLine>dim v() as object = arr</SourceLine>
+   <SourceLine>for i as integer = 0 to v.Ubound</SourceLine>
+   <SourceLine>r.Append v(i)</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine>case variant.TypeSingle</SourceLine>
+   <SourceLine>dim v() as single = arr</SourceLine>
+   <SourceLine>for i as integer = 0 to v.Ubound</SourceLine>
+   <SourceLine>r.Append v(i)</SourceLine>
+   <SourceLine>next</SourceLine>
+   <SourceLine>case else</SourceLine>
+   <SourceLine>//what...</SourceLine>
+   <SourceLine>end select</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>end if</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>return r</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>Arr as Variant</ItemParams>
+  <ItemResult>Variant()</ItemResult>
+ </Method>
+ <Note>
+  <ItemName>ReleaseNotes</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <NoteLine>ReleaseNotes</NoteLine>
+   <NoteLine></NoteLine>
+   <NoteLine></NoteLine>
+  </ItemSource>
+  <ItemFlags>0</ItemFlags>
+ </Note>
+ <ViewBehavior>
+  <ViewProperty>
+   <ObjName>Name</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Index</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <PropertyValue>-2147483648</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Super</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Left</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Top</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+ </ViewBehavior>
+</block>
+</RBProject>

@@ -1,5 +1,6 @@
-BytefactoryORM – http://bytefactory.ch/xojo/bytefactoryorm/
+BytefactoryORM
 ==============
+http://bytefactory.ch/xojo/bytefactoryorm/
 
 **Today I decided to release my own ORM to the public. The source code is provided under the MIT License.** **BytefactoryORM is a set of classes that allows you to interact with your databases in an object-oriented manner. No need to write SQL statements anymore! It's comparable to Bob Keeney's ActiveRecord port for Xojo - though not intended to be any competition.**
 
@@ -31,7 +32,7 @@ weak-typed. By design – so please don't beat me ;-)
 
 Every table has to have an _id_ field of a numeric type that is unique. This
 servers as the internal reference. Fields may **only** contain alphanumeric
-characters. **Avoid underscores (_). **And no spaces, please. Underscores are
+characters. **Avoid underscores**. And no spaces, please. Underscores are
 used for foreign keys to model relationships. Only. Example: You have two
 tables called _albums_ and _tracks_. The table _tracks__ _then would have a
 field called _albums_id_. Many-to-many relations are possible, too. Suppose

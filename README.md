@@ -1,4 +1,4 @@
-BytefactoryORM
+BytefactoryORM – http://bytefactory.ch/xojo/bytefactoryorm/
 ==============
 
 **Today I decided to release my own ORM to the public. The source code is provided under the MIT License.** **BytefactoryORM is a set of classes that allows you to interact with your databases in an object-oriented manner. No need to write SQL statements anymore! It's comparable to Bob Keeney's ActiveRecord port for Xojo - though not intended to be any competition.**
